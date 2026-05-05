@@ -1,0 +1,90 @@
+import os
+
+# --- Task 1: Basic File Reading ---
+print("--- Task 1: Basic File Reading ---")
+
+with open('CS4.txt', 'r') as f:
+    content = f.read()
+
+
+with open('CS4.txt', 'r') as f:
+    first_line = f.readline()
+
+
+with open('CS4.txt', 'r') as f:
+    all_lines = f.readlines()
+
+print(f"Total number of lines: {len(all_lines)}")
+print(f"First 2 lines:\n{''.join(all_lines[:2])}")
+print(f"Last 2 lines:\n{''.join(all_lines[-2:])}")
+
+
+# --- Task 2: Log Classification ---
+log_counts = {"INFO": 0, "WARNING": 0, "ERROR": 0}
+for line in all_lines:
+    if "INFO" in line:
+        log_counts["INFO"] += 1
+    elif "WARNING" in line:
+        log_counts["WARNING"] += 1
+    elif "ERROR" in line:
+        log_counts["ERROR"] += 1
+
+print("\n--- Task 2: Log Classification ---")
+print("Log Summary Dictionary:", log_counts)
+
+
+# --- Task 3: Write Filtered Files ---
+info_lines = [line for line in all_lines if "INFO" in line]
+warning_lines = [line for line in all_lines if "WARNING" in line]
+error_lines = [line for line in all_lines if "ERROR" in line]
+
+
+with open('info_logs.txt', 'w') as f:
+    for line in info_lines:
+        f.write(line)
+
+
+with open('warning_logs.txt', 'w') as f:
+    f.writelines(warning_lines)
+
+with open('error_logs.txt', 'w') as f:
+    f.writelines(error_lines)
+
+print("\n--- Task 3 ---")
+print("Filtered files created: info_logs.txt, warning_logs.txt, error_logs.txt")
+
+
+# --- Task 4: Search Feature ---
+print("\n--- Task 4: Search Feature ---")
+# search_key = input("Enter keyword to search: ")
+search_key = "ERROR"
+print(f"Searching for: {search_key}")
+
+matching_lines = [line for line in all_lines if search_key in line]
+print("Matching lines found:")
+for match in matching_lines:
+    print(match.strip())
+
+with open('search_result.txt', 'w') as f:
+    f.writelines(matching_lines)
+
+
+# --- File Pointer (seek) Operations ---
+print("\n--- File Pointer (seek) Operations ---")
+with open('CS4.txt', 'r') as f:
+   
+    chars_50 = f.read(50)
+    print(f"First 50 characters: {chars_50}")
+    
+   
+    f.seek(0)
+    print(f"Content at Beginning: {f.read(20)}...")
+    
+    
+    file_size = os.path.getsize('CS4.txt')
+    f.seek(file_size // 2)
+    print(f"Content at Middle: {f.read(20)}...")
+    
+
+    f.seek(max(0, file_size - 100))
+    print(f"Content from last 100 chars: {f.read()}")
